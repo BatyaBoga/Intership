@@ -8,5 +8,32 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="62"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <DockPanel Height="62" LastChildFill="False" Background="Gray">
+                <Button Content="Triangle" Height="35" Margin="0,0,60,0" DockPanel.Dock="Right" Width="55"/>
+                <Button Content="Circle" Height="34" Margin="0,0,10,0" DockPanel.Dock="Right" Width="55"/>
+                <Button x:Name="RectangleBtn" Content="Rectangle" Height="33" Margin="0,0,10,0" DockPanel.Dock="Right" Width="55" Click="RectangleBtn_Click"/>
+            </DockPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="166"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid HorizontalAlignment="Center" Width="166">
+                <TreeView Width="165" Background="LightGray"/>
+            </Grid>
+
+            <Canvas x:Name="Canva" Grid.Column="1"/>
+
+
+        </Grid>
     </Grid>
 </Window>
