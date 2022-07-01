@@ -1,21 +1,33 @@
-﻿using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
-
-namespace Intership.Figures
+﻿namespace Intership.Figures
 {
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using System.Windows.Shapes;
+
+    /// <summary>
+    /// Сlass represents circle shape type.
+    /// </summary>
     public class Circle : Figure
     {
-        public Circle(Canvas Canva) : base(Canva) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Circle"/> class.
+        /// </summary>
+        /// <param name="canva"> Canvas for display.</param>
+        public Circle(Canvas canva)
+            : base(canva)
+        {
+        }
+
+        /// <inheritdoc/>
         public override void Draw()
         {
-            Ellipse ellipse = new();
-            Width = ellipse.Width = 100;
-            Height = ellipse.Height = 100;
+            Ellipse ellipse = new ();
+            this.width = ellipse.Width = 100;
+            this.height = ellipse.Height = 100;
             ellipse.Stroke = new SolidColorBrush(Colors.Black);
             ellipse.StrokeThickness = 2;
-            FigureNum = canvas.Children.Add(ellipse);
-            Move();
+            this.figureNum = this.canvas.Children.Add(ellipse);
+            this.Move();
         }
     }
 }

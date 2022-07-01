@@ -1,42 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Timers;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Intership.Figures;
-using System.Threading;
-using System.Windows.Threading;
+﻿// <copyright file="MainWindow.xaml.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace Intership
 {
+    using System.Collections.Generic;
+    using System.Timers;
+    using System.Windows;
+    using Intership.Figures;
+
+    /// <summary>
+    /// Main class which work with view.
+    /// </summary>
     public partial class MainWindow : Window
     {
         private static List<Figures.Figure> figures;
         private System.Timers.Timer aTimer;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             figures = new List<Figures.Figure>();
-            SetTimer();
+            this.SetTimer();
         }
 
         private void SetTimer()
         {
-            aTimer = new System.Timers.Timer(100);
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
-            aTimer.Start();
+            this.aTimer = new Timer(100);
+            this.aTimer.Elapsed += this.OnTimedEvent;
+            this.aTimer.AutoReset = true;
+            this.aTimer.Enabled = true;
+            this.aTimer.Start();
         }
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
@@ -49,24 +46,23 @@ namespace Intership
 
         private void RectangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            RectangleFig rectangle = new(Canva);
-            figures.Add(rectangle); 
-            TVRectangle.Items.Add($"Rectangle №{TVRectangle.Items.Count +1}");
+            RectangleFig rectangle = new (this.Canva);
+            figures.Add(rectangle);
+            this.TVRectangle.Items.Add($"Rectangle №{this.TVRectangle.Items.Count + 1}");
         }
-     
 
         private void CircleBtn_Click(object sender, RoutedEventArgs e)
         {
-            Circle circle = new(Canva);
+            Circle circle = new (this.Canva);
             figures.Add(circle);
-            TVCircle.Items.Add($"Circle №{TVCircle.Items.Count + 1}");
+            this.TVCircle.Items.Add($"Circle №{this.TVCircle.Items.Count + 1}");
         }
 
         private void TriangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            Triangle triangle = new(Canva);
+            Triangle triangle = new (this.Canva);
             figures.Add(triangle);
-            TVTriangle.Items.Add($"Triangle №{TVTriangle.Items.Count + 1}");
+            this.TVTriangle.Items.Add($"Triangle №{this.TVTriangle.Items.Count + 1}");
         }
     }
 }
