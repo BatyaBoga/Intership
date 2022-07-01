@@ -15,8 +15,8 @@
 
         <Grid>
             <DockPanel Height="62" LastChildFill="False" Background="Gray">
-                <Button Content="Triangle" Height="35" Margin="0,0,60,0" DockPanel.Dock="Right" Width="55"/>
-                <Button Content="Circle" Height="34" Margin="0,0,10,0" DockPanel.Dock="Right" Width="55"/>
+                <Button x:Name="TriangleBtn" Content="Triangle" Height="35" Margin="0,0,60,0" DockPanel.Dock="Right" Width="55" Click="TriangleBtn_Click"/>
+                <Button x:Name="CircleBtn" Content="Circle" Height="34" Margin="0,0,10,0" DockPanel.Dock="Right" Width="55" Click="CircleBtn_Click"/>
                 <Button x:Name="RectangleBtn" Content="Rectangle" Height="33" Margin="0,0,10,0" DockPanel.Dock="Right" Width="55" Click="RectangleBtn_Click"/>
             </DockPanel>
         </Grid>
@@ -24,16 +24,27 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="166"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Grid HorizontalAlignment="Center" Width="166">
-                <TreeView Width="165" Background="LightGray"/>
+            <Grid HorizontalAlignment="Left" Width="201">
+                <TreeView Background="LightGray" Margin="0,0,0,0">
+
+                    <TreeViewItem x:Name="TVTriangle" Header="Triangles">
+                    </TreeViewItem>
+
+
+                    <TreeViewItem x:Name="TVCircle" Header="Circles">
+                    </TreeViewItem>
+
+
+                    <TreeViewItem x:Name="TVRectangle" Header="Rectangles">
+                    </TreeViewItem>
+
+                </TreeView>
             </Grid>
 
-            <Canvas x:Name="Canva" Grid.Column="1"/>
-
-
+            <Canvas x:Name="Canva" Grid.Column="1" />
         </Grid>
     </Grid>
 </Window>

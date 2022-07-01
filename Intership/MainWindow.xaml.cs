@@ -21,7 +21,7 @@ namespace Intership
 {
     public partial class MainWindow : Window
     {
-        public static List<Figures.Figure> figures;
+        private static List<Figures.Figure> figures;
         private System.Timers.Timer aTimer;
         public MainWindow()
         {
@@ -36,25 +36,37 @@ namespace Intership
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
-            
+            aTimer.Start();
+        }
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            foreach (var item in figures)
+            {
+                this.Dispatcher.Invoke(item.Move);
+            }
         }
 
         private void RectangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            Figures.Rectangle r = new(Canva);
-            figures.Add(r);
-            aTimer.Start();
+            RectangleFig rectangle = new(Canva);
+            figures.Add(rectangle); 
+            TVRectangle.Items.Add($"Rectangle №{TVRectangle.Items.Count +1}");
         }
-        private  void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+     
+
+        private void CircleBtn_Click(object sender, RoutedEventArgs e)
         {
-
-            
-            foreach (var item in figures)
-            {
-                this.Dispatcher.Invoke(item.Move);
-                ///this.Dispatcher.Invoke(Canva.Children);
-            }
+            Circle circle = new(Canva);
+            figures.Add(circle);
+            TVCircle.Items.Add($"Circle №{TVCircle.Items.Count + 1}");
         }
 
+        private void TriangleBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Triangle triangle = new(Canva);
+            figures.Add(triangle);
+            TVTriangle.Items.Add($"Triangle №{TVTriangle.Items.Count + 1}");
+        }
     }
 }

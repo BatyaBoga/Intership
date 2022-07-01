@@ -1,31 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using System.Windows.Media;
+using Intership.Commands;
+using Point = System.Windows.Point;
 
 namespace Intership.Figures
 {
     public abstract class Figure
     {
+        private Point _pos;
 
-        public Point MaxPoint { get; set; }
-        public System.Windows.Point Pos { get; set; }
-        public System.Windows.Point MovePos { get; set; }
+        private Point _movePos;
 
-       
+        protected int FigureNum;
+
+        protected double Width;
+
+        protected double Height;
 
         protected Canvas canvas;
+
+
         public Figure(Canvas canvas)
         {
             this.canvas = canvas;
-            Pos = new System.Windows.Point(canvas.ActualWidth / 2 - 100, canvas.ActualHeight / 2 - 50);
-            MovePos = new System.Windows.Point(new Random().Next(-4,4), new Random().Next(-4,4));
+            _pos = new Point((int)(canvas.ActualWidth / 2 - 100), (int)canvas.ActualHeight / 2 - 50);
+            _movePos = new Point(Random.RandomFromRangeWithExceptions(-4, 8, 0), Random.RandomFromRangeWithExceptions(-4, 8, 0));
             Draw();
         }
-        public abstract void Move();
+        public virtual void Move()
+        {
+            if (_pos.X <= 1 || _pos.X + Width >= canvas.ActualWidth - 1)
+                _movePos.X = -_movePos.X;
+
+            if (_pos.Y <= 1 || _pos.Y + Height >= canvas.ActualHeight - 1)
+                _movePos.Y = -_movePos.Y;
+
+            _pos = new Point(_pos.X + _movePos.X, _pos.Y + _movePos.Y);
+           canvas.Children[FigureNum].RenderTransform = new TranslateTransform(_pos.X, _pos.Y);
+           
+        }
         public abstract void Draw();
     }
 }
