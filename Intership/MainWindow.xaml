@@ -28,20 +28,14 @@
             </Grid.ColumnDefinitions>
 
             <Grid HorizontalAlignment="Left" Width="201">
-                <TreeView Background="LightGray" Margin="0,0,0,0">
+                <TreeView x:Name="TV" Background="LightGray" SelectedItemChanged="TV_SelectedItemChanged" Margin="0,0,35,0">
 
-                    <TreeViewItem x:Name="TVTriangle" Header="Triangles">
-                    </TreeViewItem>
-
-
-                    <TreeViewItem x:Name="TVCircle" Header="Circles">
-                    </TreeViewItem>
-
-
-                    <TreeViewItem x:Name="TVRectangle" Header="Rectangles">
-                    </TreeViewItem>
+                    <TreeViewItem x:Name="TVTriangle" Header="Triangles"/>
+                    <TreeViewItem x:Name="TVCircle" Header="Circles"/>
+                    <TreeViewItem x:Name="TVRectangle" Header="Rectangles"/>
 
                 </TreeView>
+                <Button x:Name="StartBtn" Content="Stop" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="166" Click="StartBtn_Click"/>
             </Grid>
 
             <Canvas x:Name="Canva" Grid.Column="1" />

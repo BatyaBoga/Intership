@@ -4,9 +4,12 @@
 
 namespace Intership
 {
+    using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Timers;
     using System.Windows;
+    using System.Windows.Controls;
     using Intership.Figures;
 
     /// <summary>
@@ -14,8 +17,11 @@ namespace Intership
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static List<Figures.Figure> figures;
-        private System.Timers.Timer aTimer;
+        private static List<Figure> figures;
+        //TreeViewItem item = new TreeViewItem();
+        //TreeViewItem item = new TreeViewItem();
+
+        private Timer aTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -23,7 +29,7 @@ namespace Intership
         public MainWindow()
         {
             this.InitializeComponent();
-            figures = new List<Figures.Figure>();
+            figures = new List<Figure>();
             this.SetTimer();
         }
 
@@ -46,23 +52,66 @@ namespace Intership
 
         private void RectangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            RectangleFig rectangle = new (this.Canva);
-            figures.Add(rectangle);
-            this.TVRectangle.Items.Add($"Rectangle №{this.TVRectangle.Items.Count + 1}");
+            this.AddToFigures(new RectangleFig(this.Canva), this.TVRectangle, "Rectangle");
         }
 
         private void CircleBtn_Click(object sender, RoutedEventArgs e)
         {
-            Circle circle = new (this.Canva);
-            figures.Add(circle);
-            this.TVCircle.Items.Add($"Circle №{this.TVCircle.Items.Count + 1}");
+            this.AddToFigures(new Circle(this.Canva), this.TVCircle, "Rectangle");
         }
 
         private void TriangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            Triangle triangle = new (this.Canva);
-            figures.Add(triangle);
-            this.TVTriangle.Items.Add($"Triangle №{this.TVTriangle.Items.Count + 1}");
+            this.AddToFigures(new Triangle(this.Canva), this.TVTriangle, "Rectangle");
+        }
+
+        private void AddToFigures(object figure, TreeViewItem TV, string Header)
+        {
+            if (figure is Figure)
+            {
+                figures.Add((Figure)figure);
+                var TvItem = new TreeViewItem();
+                TvItem.Header = $"{Header} {TV.Items.Count + 1}";
+                TvItem.Tag = figure;
+                TV.Items.Add(TvItem);
+            }
+            else
+            {
+                throw new Exception("Object not a Figure");
+            }
+        }
+
+        private void StartBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (((TreeViewItem)this.TV.SelectedItem).Tag is Figure)
+            {
+                if (figures.Contains((Figure)((TreeViewItem)this.TV.SelectedItem).Tag))
+                {
+                    figures.Remove((Figure)((TreeViewItem)this.TV.SelectedItem).Tag);
+                    this.StartBtn.Content = "Start";
+                }
+                else
+                {
+                    figures.Add((Figure)((TreeViewItem)this.TV.SelectedItem).Tag);
+                    this.StartBtn.Content = "Stop";
+                }
+            }
+        }
+
+        private void TV_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (((TreeViewItem)this.TV.SelectedItem).Tag is Figure)
+            {
+                if (figures.Contains((Figure)((TreeViewItem)this.TV.SelectedItem).Tag))
+                {
+                    this.StartBtn.Content = "Stop";
+                }
+                else
+                {
+                    this.StartBtn.Content = "Start";
+                }
+            }
         }
     }
 }
