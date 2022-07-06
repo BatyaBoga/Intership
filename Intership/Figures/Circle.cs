@@ -27,7 +27,6 @@
             ellipse.Stroke = new SolidColorBrush(Colors.Black);
             ellipse.StrokeThickness = 2;
             this.figureNum = this.canvas.Children.Add(ellipse);
-            this.Move();
         }
     }
 }

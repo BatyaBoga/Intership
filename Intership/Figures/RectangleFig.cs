@@ -27,6 +27,5 @@ public class RectangleFig : Figure
         rectangle.Stroke = new SolidColorBrush(Colors.Black);
         rectangle.StrokeThickness = 2;
         this.figureNum = this.canvas.Children.Add(rectangle);
-        this.Move();
     }
 }

@@ -18,8 +18,6 @@ namespace Intership
     public partial class MainWindow : Window
     {
         private static List<Figure> figures;
-        //TreeViewItem item = new TreeViewItem();
-        //TreeViewItem item = new TreeViewItem();
 
         private Timer aTimer;
 
@@ -52,48 +50,32 @@ namespace Intership
 
         private void RectangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.AddToFigures(new RectangleFig(this.Canva), this.TVRectangle, "Rectangle");
+            this.AddToFigures(new RectangleFig(this.Canva), this.TreeViewItemRectangle, "Rectangle");
         }
 
         private void CircleBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.AddToFigures(new Circle(this.Canva), this.TVCircle, "Rectangle");
+            this.AddToFigures(new Circle(this.Canva), this.TreeViewItemCircle, "Circle");
         }
 
         private void TriangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.AddToFigures(new Triangle(this.Canva), this.TVTriangle, "Rectangle");
-        }
-
-        private void AddToFigures(object figure, TreeViewItem TV, string Header)
-        {
-            if (figure is Figure)
-            {
-                figures.Add((Figure)figure);
-                var TvItem = new TreeViewItem();
-                TvItem.Header = $"{Header} {TV.Items.Count + 1}";
-                TvItem.Tag = figure;
-                TV.Items.Add(TvItem);
-            }
-            else
-            {
-                throw new Exception("Object not a Figure");
-            }
+            this.AddToFigures(new Triangle(this.Canva), this.TreeViewItemTriangle, "Triangle");
         }
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
         {
 
-            if (((TreeViewItem)this.TV.SelectedItem).Tag is Figure)
+            if (SelectedItemIsFigure())
             {
-                if (figures.Contains((Figure)((TreeViewItem)this.TV.SelectedItem).Tag))
+                if (IsSelectedItemInList())
                 {
-                    figures.Remove((Figure)((TreeViewItem)this.TV.SelectedItem).Tag);
+                    StopSelectedFigure();
                     this.StartBtn.Content = "Start";
                 }
                 else
                 {
-                    figures.Add((Figure)((TreeViewItem)this.TV.SelectedItem).Tag);
+                    StartSelectedFigure();
                     this.StartBtn.Content = "Stop";
                 }
             }
@@ -101,9 +83,9 @@ namespace Intership
 
         private void TV_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (((TreeViewItem)this.TV.SelectedItem).Tag is Figure)
+            if (SelectedItemIsFigure())
             {
-                if (figures.Contains((Figure)((TreeViewItem)this.TV.SelectedItem).Tag))
+                if (IsSelectedItemInList())
                 {
                     this.StartBtn.Content = "Stop";
                 }
@@ -112,6 +94,42 @@ namespace Intership
                     this.StartBtn.Content = "Start";
                 }
             }
+        }
+
+        private void StopSelectedFigure()
+        {
+            figures.Remove((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
+        }
+
+        private void StartSelectedFigure()
+        {
+            figures.Add((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
+        }
+
+        private void AddToFigures(object figure, TreeViewItem tv, string header)
+        {
+            if (figure is Figure)
+            {
+                figures.Add((Figure)figure);
+                var TvItem = new TreeViewItem();
+                TvItem.Header = $"{header} {tv.Items.Count + 1}";
+                TvItem.Tag = figure;
+                tv.Items.Add(TvItem);
+            }
+            else
+            {
+                throw new Exception("Object not a Figure");
+            }
+        }
+
+        private bool SelectedItemIsFigure()
+        {
+            return ((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag is Figure;
+        }
+
+        private bool IsSelectedItemInList()
+        {
+            return figures.Contains((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Intership"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Intership" Height="450" Width="800">
     <Grid>
 
         <Grid.RowDefinitions>
@@ -28,12 +28,10 @@
             </Grid.ColumnDefinitions>
 
             <Grid HorizontalAlignment="Left" Width="201">
-                <TreeView x:Name="TV" Background="LightGray" SelectedItemChanged="TV_SelectedItemChanged" Margin="0,0,35,0">
-
-                    <TreeViewItem x:Name="TVTriangle" Header="Triangles"/>
-                    <TreeViewItem x:Name="TVCircle" Header="Circles"/>
-                    <TreeViewItem x:Name="TVRectangle" Header="Rectangles"/>
-
+                <TreeView x:Name="TreeViewFigures" Background="LightGray" SelectedItemChanged="TV_SelectedItemChanged" Margin="0,0,35,0">
+                    <TreeViewItem x:Name="TreeViewItemTriangle" Header="Triangles"/>
+                    <TreeViewItem x:Name="TreeViewItemCircle" Header="Circles"/>
+                    <TreeViewItem x:Name="TreeViewItemRectangle" Header="Rectangles"/>
                 </TreeView>
                 <Button x:Name="StartBtn" Content="Stop" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="166" Click="StartBtn_Click"/>
             </Grid>

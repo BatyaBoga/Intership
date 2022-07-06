@@ -33,7 +33,6 @@
             this.height = triangle.Height = 100;
             triangle.StrokeThickness = 2;
             this.figureNum = this.canvas.Children.Add(triangle);
-            this.Move();
         }
     }
 }

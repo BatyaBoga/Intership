@@ -44,6 +44,7 @@
             this.pos = new Point((int)((this.canvas.ActualWidth / 2) - 100), ((int)this.canvas.ActualHeight / 2) - 50);
             this.movePos = new Point(Random.RandomFromRangeWithExceptions(-4, 8, 0), Random.RandomFromRangeWithExceptions(-4, 8, 0));
             this.Draw();
+            this.Move();
         }
 
         /// <summary>
