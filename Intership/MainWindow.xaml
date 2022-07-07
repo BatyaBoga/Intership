@@ -4,8 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Intership"
+        xmlns:globalization="clr-namespace:System.Globalization;assembly=mscorlib"
+        xmlns:res="clr-namespace:Intership.Properties"
+        xmlns:l="clr-namespace:Intership.Localization"
         mc:Ignorable="d"
-        Title="Intership" Height="450" Width="800">
+        Title= "{l:Localization Title}" Height="450" Width="800">
     <Grid>
 
         <Grid.RowDefinitions>
@@ -14,11 +17,24 @@
         </Grid.RowDefinitions>
 
         <Grid>
+
             <DockPanel Height="62" LastChildFill="False" Background="Gray">
-                <Button x:Name="TriangleBtn" Content="Triangle" Height="35" Margin="0,0,60,0" DockPanel.Dock="Right" Width="55" Click="TriangleBtn_Click"/>
-                <Button x:Name="CircleBtn" Content="Circle" Height="34" Margin="0,0,10,0" DockPanel.Dock="Right" Width="55" Click="CircleBtn_Click"/>
-                <Button x:Name="RectangleBtn" Content="Rectangle" Height="33" Margin="0,0,10,0" DockPanel.Dock="Right" Width="55" Click="RectangleBtn_Click"/>
+                <Button x:Name="TriangleBtn" Content="{l:Localization TriangleBtn}" Height="34" Margin="10,0,10,0" DockPanel.Dock="Left" Width="90" Click="TriangleBtn_Click"/>
+                <Button x:Name="CircleBtn" Content="{l:Localization CircleBtn}" Height="34" Margin="0,0,10,0" DockPanel.Dock="Left" Width="90" Click="CircleBtn_Click"/>
+                <Button x:Name="RectangleBtn" Content="{l:Localization RectangleBtn}" Height="34" Margin="0,0,10,0" DockPanel.Dock="Left" Width="90" Click="RectangleBtn_Click"/>
+
+                <ComboBox x:Name="ComboBoxLanguage"
+                  SelectedIndex="0" DockPanel.Dock="Right" Width="71" Margin="0,0,10,0" Height="20"
+                      SelectionChanged="ComboBoxLanguage_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type globalization:CultureInfo}" >
+                            <TextBlock Text="{l:Localization KeyBinding={Binding ThreeLetterISOLanguageName}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
             </DockPanel>
+
         </Grid>
 
         <Grid Grid.Row="1">
@@ -29,11 +45,11 @@
 
             <Grid HorizontalAlignment="Left" Width="201">
                 <TreeView x:Name="TreeViewFigures" Background="LightGray" SelectedItemChanged="TV_SelectedItemChanged" Margin="0,0,35,0">
-                    <TreeViewItem x:Name="TreeViewItemTriangle" Header="Triangles"/>
-                    <TreeViewItem x:Name="TreeViewItemCircle" Header="Circles"/>
-                    <TreeViewItem x:Name="TreeViewItemRectangle" Header="Rectangles"/>
+                    <TreeViewItem x:Name="TreeViewItemTriangle" Header="{l:Localization TriangleTV}"/>
+                    <TreeViewItem x:Name="TreeViewItemCircle" Header="{l:Localization CircleTV}"/>
+                    <TreeViewItem x:Name="TreeViewItemRectangle" Header="{l:Localization RectangleTV}"/>
                 </TreeView>
-                <Button x:Name="StartBtn" Content="Stop" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="166" Click="StartBtn_Click"/>
+                <Button x:Name="StartBtn" Content="{l:Localization StopBtn}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="166" Click="StartBtn_Click"/>
             </Grid>
 
             <Canvas x:Name="Canva" Grid.Column="1" />

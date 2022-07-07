@@ -6,11 +6,18 @@ namespace Intership
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using System.ComponentModel;
+    using System.Globalization;
+    using System.Reflection;
+    using System.Resources;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
     using System.Timers;
     using System.Windows;
     using System.Windows.Controls;
     using Intership.Figures;
+    using Intership.Localization;
+    using Timer = System.Timers.Timer;
 
     /// <summary>
     /// Main class which work with view.
@@ -21,6 +28,12 @@ namespace Intership
 
         private Timer aTimer;
 
+        private IEnumerable<CultureInfo> cultureInfos;
+
+        private CultureInfo currentCulture;
+
+        private LocalizationManager lm;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -28,7 +41,52 @@ namespace Intership
         {
             this.InitializeComponent();
             figures = new List<Figure>();
+            this.lm = LocalizationManager.Instance;
+            this.ComboBoxLanguage.ItemsSource = this.CultureInfos;
             this.SetTimer();
+        }
+
+        /// <summary>
+        /// Gets or sets a property which containing a collection of available cultures.
+        /// </summary>
+        public IEnumerable<CultureInfo> CultureInfos
+        {
+            get
+            {
+                return this.cultureInfos ?? (this.cultureInfos = LocalizationManager.Instance.Cultures);
+            }
+
+            set
+            {
+                if (Equals(value, this.cultureInfos))
+                {
+                    return;
+                }
+
+                this.cultureInfos = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a property which containing selected culture.
+        /// </summary>
+        public CultureInfo CurrentCulture
+        {
+            get
+            {
+                return this.currentCulture ?? (this.currentCulture = LocalizationManager.Instance.CurrentCulture);
+            }
+
+            set
+            {
+                if (Equals(value, this.currentCulture))
+                {
+                    return;
+                }
+
+                this.currentCulture = value;
+                LocalizationManager.Instance.CurrentCulture = value;
+            }
         }
 
         private void SetTimer()
@@ -50,48 +108,47 @@ namespace Intership
 
         private void RectangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.AddToFigures(new RectangleFig(this.Canva), this.TreeViewItemRectangle, "Rectangle");
+            this.AddToFigures(new RectangleFig(this.Canva), this.TreeViewItemRectangle);
         }
 
         private void CircleBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.AddToFigures(new Circle(this.Canva), this.TreeViewItemCircle, "Circle");
+            this.AddToFigures(new Circle(this.Canva), this.TreeViewItemCircle);
         }
 
         private void TriangleBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.AddToFigures(new Triangle(this.Canva), this.TreeViewItemTriangle, "Triangle");
+            this.AddToFigures(new Triangle(this.Canva), this.TreeViewItemTriangle);
         }
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
         {
-
-            if (SelectedItemIsFigure())
+            if (this.SelectedItemIsFigure())
             {
-                if (IsSelectedItemInList())
+                if (this.IsSelectedItemInList())
                 {
-                    StopSelectedFigure();
-                    this.StartBtn.Content = "Start";
+                    this.StopSelectedFigure();
+                    this.StartBtn.Content = this.lm.Localize("StartBtn");
                 }
                 else
                 {
-                    StartSelectedFigure();
-                    this.StartBtn.Content = "Stop";
+                    this.StartSelectedFigure();
+                    this.StartBtn.Content = this.lm.Localize("StopBtn");
                 }
             }
         }
 
         private void TV_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (SelectedItemIsFigure())
+            if (this.SelectedItemIsFigure())
             {
-                if (IsSelectedItemInList())
+                if (this.IsSelectedItemInList())
                 {
-                    this.StartBtn.Content = "Stop";
+                    this.StartBtn.Content = this.lm.Localize("StopBtn");
                 }
                 else
                 {
-                    this.StartBtn.Content = "Start";
+                    this.StartBtn.Content = this.lm.Localize("StartBtn");
                 }
             }
         }
@@ -106,15 +163,15 @@ namespace Intership
             figures.Add((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
         }
 
-        private void AddToFigures(object figure, TreeViewItem tv, string header)
+        private void AddToFigures(object figure, TreeViewItem tv)
         {
             if (figure is Figure)
             {
                 figures.Add((Figure)figure);
-                var TvItem = new TreeViewItem();
-                TvItem.Header = $"{header} {tv.Items.Count + 1}";
-                TvItem.Tag = figure;
-                tv.Items.Add(TvItem);
+                var tvItem = new TreeViewItem();
+                tvItem.Header = $"№{tv.Items.Count + 1}";
+                tvItem.Tag = figure;
+                tv.Items.Add(tvItem);
             }
             else
             {
@@ -130,6 +187,17 @@ namespace Intership
         private bool IsSelectedItemInList()
         {
             return figures.Contains((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
+        }
+
+        private void ComboBoxLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Equals(this.ComboBoxLanguage.SelectedItem, this.currentCulture))
+            {
+                return;
+            }
+
+            this.currentCulture = (CultureInfo)this.ComboBoxLanguage.SelectedItem;
+            LocalizationManager.Instance.CurrentCulture = (CultureInfo)this.ComboBoxLanguage.SelectedItem;
         }
     }
 }
