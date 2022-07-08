@@ -2,7 +2,7 @@
 {
     using System.Windows.Controls;
     using System.Windows.Media;
-    using Intership.Commands;
+    using Random.Range;
     using Point = System.Windows.Point;
 
     /// <summary>
