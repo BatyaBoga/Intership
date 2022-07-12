@@ -6,12 +6,7 @@ namespace Intership
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Globalization;
-    using System.Reflection;
-    using System.Resources;
-    using System.Runtime.CompilerServices;
-    using System.Threading;
     using System.Timers;
     using System.Windows;
     using System.Windows.Controls;
@@ -26,13 +21,15 @@ namespace Intership
     {
         private static List<Figure> figures;
 
-        private Timer aTimer;
+        private readonly LocalizationManager lm;
+
+        private readonly Timer moveTimer;
+
+        private readonly Timer intersectionTimer;
 
         private IEnumerable<CultureInfo> cultureInfos;
 
         private CultureInfo currentCulture;
-
-        private LocalizationManager lm;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -43,7 +40,8 @@ namespace Intership
             figures = new List<Figure>();
             this.lm = LocalizationManager.Instance;
             this.ComboBoxLanguage.ItemsSource = this.CultureInfos;
-            this.SetTimer();
+            this.moveTimer = this.SetTimer(100, this.OnMoveEvent);
+            this.intersectionTimer = this.SetTimer(500, this.OnInterestionEvent);
         }
 
         /// <summary>
@@ -89,20 +87,31 @@ namespace Intership
             }
         }
 
-        private void SetTimer()
+        private Timer SetTimer(int milisecond,  ElapsedEventHandler onTimeEvet)
         {
-            this.aTimer = new Timer(100);
-            this.aTimer.Elapsed += this.OnTimedEvent;
-            this.aTimer.AutoReset = true;
-            this.aTimer.Enabled = true;
-            this.aTimer.Start();
+            var timer = new Timer(milisecond);
+            timer.Elapsed += onTimeEvet;
+            timer.Enabled = true;
+            timer.Start();
+            return timer;
         }
 
-        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        private void OnMoveEvent(object source, ElapsedEventArgs e)
         {
             foreach (var item in figures)
             {
                 this.Dispatcher.Invoke(item.Move);
+            }
+        }
+
+        private void OnInterestionEvent(object source, ElapsedEventArgs e)
+        {
+            for (int i = 0; i < figures.Count; i++)
+            {
+                for (int j = i + 1; j < figures.Count; j++)
+                {
+                    figures[i].IsIntersection(figures[j]);
+                }
             }
         }
 
@@ -119,6 +128,22 @@ namespace Intership
         private void TriangleBtn_Click(object sender, RoutedEventArgs e)
         {
             this.AddToFigures(new Triangle(this.Canva), this.TreeViewItemTriangle);
+        }
+
+        private void AddToFigures(object figure, TreeViewItem tv)
+        {
+            if (figure is Figure)
+            {
+                figures.Add((Figure)figure);
+                var tvItem = new TreeViewItem();
+                tvItem.Header = $"№{tv.Items.Count + 1}";
+                tvItem.Tag = figure;
+                tv.Items.Add(tvItem);
+            }
+            else
+            {
+                throw new Exception("Object not a Figure");
+            }
         }
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
@@ -138,6 +163,16 @@ namespace Intership
             }
         }
 
+        private void StopSelectedFigure()
+        {
+            figures.Remove((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
+        }
+
+        private void StartSelectedFigure()
+        {
+            figures.Add((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
+        }
+
         private void TV_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (this.SelectedItemIsFigure())
@@ -153,35 +188,16 @@ namespace Intership
             }
         }
 
-        private void StopSelectedFigure()
-        {
-            figures.Remove((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
-        }
-
-        private void StartSelectedFigure()
-        {
-            figures.Add((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag);
-        }
-
-        private void AddToFigures(object figure, TreeViewItem tv)
-        {
-            if (figure is Figure)
-            {
-                figures.Add((Figure)figure);
-                var tvItem = new TreeViewItem();
-                tvItem.Header = $"№{tv.Items.Count + 1}";
-                tvItem.Tag = figure;
-                tv.Items.Add(tvItem);
-            }
-            else
-            {
-                throw new Exception("Object not a Figure");
-            }
-        }
-
         private bool SelectedItemIsFigure()
         {
-            return ((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag is Figure;
+            var treeViewItem = this.TreeViewFigures.SelectedItem as TreeViewItem;
+
+            if (treeViewItem != null)
+            {
+                return treeViewItem.Tag is Figure;
+            }
+
+            return false;
         }
 
         private bool IsSelectedItemInList()
@@ -198,6 +214,22 @@ namespace Intership
 
             this.currentCulture = (CultureInfo)this.ComboBoxLanguage.SelectedItem;
             LocalizationManager.Instance.CurrentCulture = (CultureInfo)this.ComboBoxLanguage.SelectedItem;
+        }
+
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.SelectedItemIsFigure())
+            {
+                ((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag).AddHandler();
+            }
+        }
+
+        private void RemoveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.SelectedItemIsFigure())
+            {
+                ((Figure)((TreeViewItem)this.TreeViewFigures.SelectedItem).Tag).RemoveHandler();
+            }
         }
     }
 }

@@ -28,5 +28,14 @@
             ellipse.StrokeThickness = 2;
             this.figureNum = this.canvas.Children.Add(ellipse);
         }
+
+        /// <summary>
+        /// Intersection check.
+        /// </summary>
+        /// <param name="figure">Figure.</param>
+        public override void IsIntersection(Figure figure)
+        {
+            this.IntersectionCheck<Circle>(figure);
+        }
     }
 }

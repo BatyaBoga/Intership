@@ -34,5 +34,14 @@
             triangle.StrokeThickness = 2;
             this.figureNum = this.canvas.Children.Add(triangle);
         }
+
+        /// <summary>
+        /// Intersection check.
+        /// </summary>
+        /// <param name="figure">Figure.</param>
+        public override void IsIntersection(Figure figure)
+        {
+            this.IntersectionCheck<Triangle>(figure);
+        }
     }
 }

@@ -32,7 +32,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                
+
             </DockPanel>
 
         </Grid>
@@ -43,12 +43,14 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Grid HorizontalAlignment="Left" Width="201">
-                <TreeView x:Name="TreeViewFigures" Background="LightGray" SelectedItemChanged="TV_SelectedItemChanged" Margin="0,0,35,0">
+            <Grid HorizontalAlignment="Left" Width="166"  Grid.ColumnSpan="2">
+                <TreeView x:Name="TreeViewFigures" Background="LightGray" SelectedItemChanged="TV_SelectedItemChanged" >
                     <TreeViewItem x:Name="TreeViewItemTriangle" Header="{l:Localization TriangleTV}"/>
                     <TreeViewItem x:Name="TreeViewItemCircle" Header="{l:Localization CircleTV}"/>
                     <TreeViewItem x:Name="TreeViewItemRectangle" Header="{l:Localization RectangleTV}"/>
                 </TreeView>
+                <Button x:Name="Addbtn" Content="+" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20" Width="83" Click="AddBtn_Click"/>
+                <Button x:Name="RemoveBtn" Content="-" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,20" Width="83" Click="RemoveBtn_Click"/>
                 <Button x:Name="StartBtn" Content="{l:Localization StopBtn}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="166" Click="StartBtn_Click"/>
             </Grid>
 

@@ -28,4 +28,13 @@ public class RectangleFig : Figure
         rectangle.StrokeThickness = 2;
         this.figureNum = this.canvas.Children.Add(rectangle);
     }
+
+    /// <summary>
+    /// Intersection check.
+    /// </summary>
+    /// <param name="figure">Figure.</param>
+    public override void IsIntersection(Figure figure)
+    {
+        this.IntersectionCheck<RectangleFig>(figure);
+    }
 }

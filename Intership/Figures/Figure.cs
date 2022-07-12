@@ -1,18 +1,24 @@
 ﻿namespace Intership.Figures
 {
+    using System;
     using System.Windows.Controls;
     using System.Windows.Media;
-    using Random.Range;
     using Point = System.Windows.Point;
+    using Random = Random.Range.Random;
 
     /// <summary>
     /// Abstract class of Figures.
     /// </summary>
     public abstract class Figure
     {
-        private Point pos;
+        /// <summary>
+        /// Figure position.
+        /// </summary>
+        protected Point pos;
 
         private Point movePos;
+
+        private IntersectionManager intersectionManager;
 
         /// <summary>
         /// Number of figure in canvas element.
@@ -43,9 +49,15 @@
             this.canvas = canvas;
             this.pos = new Point((int)((this.canvas.ActualWidth / 2) - 100), ((int)this.canvas.ActualHeight / 2) - 50);
             this.movePos = new Point(Random.RandomFromRangeWithExceptions(-4, 8, 0), Random.RandomFromRangeWithExceptions(-4, 8, 0));
+            this.intersectionManager = new IntersectionManager();
             this.Draw();
             this.Move();
         }
+
+        /// <summary>
+        /// This Method draw selected shape.
+        /// </summary>
+        public abstract void Draw();
 
         /// <summary>
         /// Moving the shape to selected position.
@@ -67,8 +79,87 @@
         }
 
         /// <summary>
-        /// This Method draw selected shape.
+        /// Add handler to Intersection event.
         /// </summary>
-        public abstract void Draw();
+        public void AddHandler()
+        {
+            this.intersectionManager.Intersection += this.NewIntersection;
+        }
+
+        /// <summary>
+        /// Remove handler to Intersection event.
+        /// </summary>
+        public void RemoveHandler()
+        {
+            this.intersectionManager.Intersection -= this.NewIntersection;
+        }
+
+        /// <summary>
+        /// Simulate Intersection event.
+        /// </summary>
+        /// <param name="x">X.</param>
+        /// <param name="y">Y.</param>
+        public void Simulate(double x, double y)
+        {
+            this.intersectionManager.SimulateIntersection(new Point(x, y));
+        }
+
+        /// <summary>
+        /// Intersection check.
+        /// </summary>
+        /// <param name="figure">Checked figure.</param>
+        public abstract void IsIntersection(Figure figure);
+
+        /// <summary>
+        /// Event reaction.
+        /// </summary>
+        /// <param name="sender"> Sender.</param>
+        /// <param name="e"> EvenetArgs.</param>
+        protected virtual void NewIntersection(object sender, IntersectionEventArgs e)
+        {
+            ConsoleManager.ShowConsoleWindow();
+            Console.Beep();
+            Console.WriteLine(e.ToString());
+        }
+
+        /// <summary>
+        /// Basic verification algorithm.
+        /// </summary>
+        /// <typeparam name="T">Figure type.</typeparam>
+        /// <param name="figure">Figure.</param>
+        protected virtual void IntersectionCheck<T>(Figure figure)
+            where T : Figure
+        {
+            T other = figure as T;
+
+            if (other != null)
+            {
+                double x = this.AxisCheck(figure.pos.X, figure.width, this.pos.X, this.width);
+                double y = this.AxisCheck(figure.pos.Y, figure.height, this.pos.Y, this.height);
+
+                if (x > 0 && y > 0)
+                {
+                    this.Simulate(x, y);
+                }
+            }
+
+            return;
+        }
+
+        private double AxisCheck(double axis, double size, double thisAxis, double thisSize)
+        {
+            if (axis < thisAxis && axis + size > thisAxis)
+            {
+                return axis + size;
+            }
+            else if (axis < thisAxis + thisSize && axis + size > thisAxis + thisSize)
+            {
+                return axis;
+            }
+            else
+            {
+                return -1;
+            }
+        }
     }
 }
