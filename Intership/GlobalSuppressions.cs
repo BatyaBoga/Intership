@@ -11,3 +11,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "<Ожидание>", Scope = "member", Target = "~F:Intership.Figures.Figure.figureNum")]
 [assembly: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "<Ожидание>", Scope = "member", Target = "~F:Intership.Figures.Figure.width")]
 [assembly: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "<Ожидание>", Scope = "member", Target = "~F:Intership.Figures.Figure.height")]
+[assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File should have header", Justification = "<Ожидание>", Scope = "namespace", Target = "~N:Intership.Functions")]

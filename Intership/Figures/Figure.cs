@@ -3,6 +3,7 @@
     using System;
     using System.Windows.Controls;
     using System.Windows.Media;
+    using Intership.Functions;
     using Point = System.Windows.Point;
     using Random = Random.Range.Random;
 
@@ -47,11 +48,19 @@
         public Figure(Canvas canvas)
         {
             this.canvas = canvas;
-            this.pos = new Point((int)((this.canvas.ActualWidth / 2) - 100), ((int)this.canvas.ActualHeight / 2) - 50);
+            this.pos = this.MidleOfCanvas;
             this.movePos = new Point(Random.RandomFromRangeWithExceptions(-4, 8, 0), Random.RandomFromRangeWithExceptions(-4, 8, 0));
             this.intersectionManager = new IntersectionManager();
             this.Draw();
-            this.Move();
+            this.MoveToMiddleOfCanvas();
+        }
+
+        private Point MidleOfCanvas
+        {
+            get
+            {
+                return new Point((int)((this.canvas.ActualWidth / 2) - 100), ((int)this.canvas.ActualHeight / 2) - 50);
+            }
         }
 
         /// <summary>
@@ -75,6 +84,23 @@
             }
 
             this.pos = new Point(this.pos.X + this.movePos.X, this.pos.Y + this.movePos.Y);
+
+            if (this.IsValidPlace())
+            {
+                this.canvas.Children[this.figureNum].RenderTransform = new TranslateTransform(this.pos.X, this.pos.Y);
+            }
+            else
+            {
+                throw new Exception<OutOfBoundaryArgs>(new OutOfBoundaryArgs(this.pos));
+            }
+        }
+
+        /// <summary>
+        /// Return figure to middle of canvas.
+        /// </summary>
+        public void MoveToMiddleOfCanvas()
+        {
+            this.pos = this.MidleOfCanvas;
             this.canvas.Children[this.figureNum].RenderTransform = new TranslateTransform(this.pos.X, this.pos.Y);
         }
 
@@ -160,6 +186,17 @@
             {
                 return -1;
             }
+        }
+
+        private bool IsValidPlace()
+        {
+            if (this.pos.X + this.width >= this.canvas.ActualWidth ||
+                this.pos.Y + this.height >= this.canvas.ActualHeight)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Intership
     using System.Windows;
     using System.Windows.Controls;
     using Intership.Figures;
+    using Intership.Functions;
     using Intership.Localization;
     using Timer = System.Timers.Timer;
 
@@ -19,6 +20,8 @@ namespace Intership
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private static List<Figure> figures;
 
         private readonly LocalizationManager lm;
@@ -100,7 +103,15 @@ namespace Intership
         {
             foreach (var item in figures)
             {
-                this.Dispatcher.Invoke(item.Move);
+                try
+                {
+                    this.Dispatcher.Invoke(item.Move);
+                }
+                catch (Exception<OutOfBoundaryArgs> ex)
+                {
+                    this.Dispatcher.Invoke(item.MoveToMiddleOfCanvas);
+                    Log.Error(ex.Message);
+                }
             }
         }
 

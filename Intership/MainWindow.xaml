@@ -8,7 +8,7 @@
         xmlns:res="clr-namespace:Intership.Properties"
         xmlns:l="clr-namespace:Intership.Localization"
         mc:Ignorable="d"
-        Title= "{l:Localization Title}" Height="450" Width="800">
+        Title= "{l:Localization Title}" Height="450" Width="800" MinWidth="387" MinHeight="243">
     <Grid>
 
         <Grid.RowDefinitions>
